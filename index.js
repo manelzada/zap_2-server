@@ -10,10 +10,6 @@ io.on('connection', socket => {
   chatID = socket.handshake.query.chatID;
   socket.join(chatID);
 
-  socket.on('disconnect', () => {
-    socket.leave(chatID);
-  });
-
   socket.on('send_message', message => {
     receiverChatId = message.receiverChatId;
     senderChatId = message.senderChatId;
@@ -25,6 +21,10 @@ io.on('connection', socket => {
       'receiverChatId': receiverChatId,
     });
 
+  });
+
+  socket.on('disconnect', () => {
+    socket.leave(chatID);
   });
 
 });
