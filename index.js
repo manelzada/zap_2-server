@@ -1,30 +1,27 @@
-const app = require('express')()
-const http = require('http').createServer(app)
-const io = require('socket.io')(http);
+const server = require('http').createServer()
+const socketIO = require('socket.io')(server)
 
-app.get('/', (req, res) => {
-  res.send("Servidor ligado")
+socketIO.on('connection', function (client) {
+  console.log('Conectado', client.id);
+
+  client.on('message', function name(data) {
+    console.log(data);
+    socketIO.emit('message', data);
+  })
+
+  client.on('disconnect', function () {
+    console.log('Desconectado', client.id);
+  })
+
+  client.on('error', function (err) {
+    console.log('Error detected', client.id);
+    console.log(err);
+  })
 })
 
-io.on('connection', socket => {
-  chatID = socket.handshake.query.chatID
-  socket.join(chatID)
+var port = process.env.PORT || 3000;
 
-  socket.on('disconnect', () => {
-    socket.leave(chatID)
-  })
-
-  socket.on('send_message', message => {
-    receiverChatID = message.receiverChatID
-    senderChatID = message.senderChatID
-    content = message.content
-
-    socket.in(receiverChatID).emit('receive_message', {
-      'content': content,
-      'senderChatID': senderChatID,
-      'receiverChatID': receiverChatID,
-    })
-  })
+server.listen(port, function (err) {
+  if (err) console.log(err);
+  console.log('Listening on port', port);
 });
-
-http.listen(process.env.PORT)
