@@ -1,0 +1,17 @@
+{
+  "name": "zap_2-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "description": "",
+  "dependencies": {
+    "express": "^4.17.3",
+    "http": "^0.0.1-security",
+    "socket.io": "^4.4.1"
+  }
+}
